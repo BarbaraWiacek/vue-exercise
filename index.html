@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+    <title>Hello Vue!</title>
+</head>
+<body>
+    <div id="helloVue">
+        <h1>{{ title }}, {{ name }}!</h1>
+    </div>
+    <div id="component">
+        <p v-text="text"></p>
+        <img v-bind:src="img.src" v-bind:alt="img.alt">
+    </div>
+    <!--v-text works pretty much the same as mustache syntax -->
+    <!--v-html is used to display html -->
+    <!--v-bind is used to display whatever data, for example to take a value of an attribute from data. Instead of v-bind we can also use only a colon (:) -->
+
+    <div id="book">
+        <button v-on:click="toggleDetails">{{ title }}</button>
+        <button v-on:click="showDetail = !showDetail">{{ title }}</button>
+        <!--v-on is a directive that accepts all events like click, on keydown etc. Eg. v-on:mouseover, v-on:click. It has a shortcut: @ -->
+        <!--when writing methods (functions), dont use brackets() -->
+        <div id="bookDetail" v-show="showDetail">
+            <p>{{ author }}</p>
+            <p>{{ summary }} </p>
+        </div>
+        <!--v-show directive adds a display:none property -->
+              
+    </div>
+
+    <!--Vue instances cannot be nested in one another -->
+    
+    <div id="app" class="container">
+        <h1>Skimmit News</h1>
+        <div class="post">
+            <div id="voteCounter">
+                <span v-on:click="decrement">-</span>
+                <span v-on:click="increment">+</span>
+                <p class="votes">Votes: {{ votes }}</p>
+            </div>
+            <div><img v-bind:src="thumbnail" v-bind:alt="alt"></div>
+            <div class="post-info">
+                <h3>{{ title }}</h3>
+                <p>{{ summary }}</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="colors">
+        <h1>Colors Of The Rainbow</h1>
+        <ul>
+            <li v-bind:style="{color: item}" v-for="(item, index) in rainbow">{{ index + 1 }} - {{ item }}</li>
+        </ul>
+        <!--v-bind:style accepts an object in curly braces where we can set the styles properties using variables from our app -->
+    </div>
+
+    <!-- v-for works like ng-repeat -->
+    <!--v-for has to be placed on the item that we want to iterate (repeat) -->
+    <!--v-for directive accepts an optional index variable, which gives the access to the index of each item in the list -->
+
+
+    <div class="container">
+        <div id="media-list">
+            <h1>{{ title }}</h1>
+            <select v-on:change="filterList">
+                <option value="">Select a type of media...</option>
+                <option v-for="item in uniqueItemsList">{{ item }}</option>
+            </select>
+            <!-- whenever an event occurs (eg. change in select menu), you can gain acces to an event object
+                That event object contains useful information about the event that just occured.
+                The value of the clicked dropdown instance can be found in event.target.value  -->
+            <ul>
+            <li v-for="media in mediaList" 
+                v-show="selectedType == '' || selectedType === media.type"
+                v-on:click="toggleDetails(media)" 
+                v-bind:class="[ media.showDetail ? 'less' : 'more', media.type ]" >
+                <!-- if the selectedType is empty (equaling the value of the first option in select menu), then show the element (all elements) -->
+                <!--you can pass a specific instance of the for loop to the method as an argument: "(media)"-->
+                <h3>{{ media.title }}</h3> 
+                <div v-if="media.showDetail">
+                    <p>{{media.description}}</p>
+                    <p class="byline" v-if="media.contributor">By: {{media.contributor}}</p>
+                </div>
+                <!-- v-if vs v-show: 
+                    use v-show if you have to change the appearance often (toggle show/hide); 
+                    use v-if if the display doesn't change that often -->
+            </li>
+            </ul>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
